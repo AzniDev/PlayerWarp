@@ -22,7 +22,7 @@ class PlayerWarpManager
     }
 
     /**
-     * @return Player
+     * @return string
      */
     public function getOwner() : string
     {

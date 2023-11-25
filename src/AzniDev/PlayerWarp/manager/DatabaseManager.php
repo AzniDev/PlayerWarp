@@ -47,7 +47,6 @@ class DatabaseManager
     }
 
     /**
-     * @param Player $player
      * @param string $warpName
      * @return PlayerWarpManager|null
      */
