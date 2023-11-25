@@ -1,0 +1,13 @@
+command:
+  name: 'playerwarp'
+  aliases: ['pwarp']
+  description: ''
+
+# Default max warp for player
+max-warp: 3
+
+# Max warp for player using permission
+permissions:
+  playerwarp.warp.vip: 5
+  playerwarp.warp.legend: 10
+  playerwarp.warp.mvp: 20

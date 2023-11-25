@@ -1,0 +1,9 @@
+name: PlayerWarp
+version: 1.0.1
+api: 5.0.0
+author: AzniDev
+main: AzniDev\PlayerWarp\PlayerWarp
+
+permissions:
+  playerwarp.command:
+    default: true
