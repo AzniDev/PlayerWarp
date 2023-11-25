@@ -41,8 +41,8 @@ class PlayerWarpCommand extends Command
             case 'teleport':
                 $database = PlayerWarp::getInstance()->getDatabaseManager();
                 if (isset($args[1])) {
-                    if (in_array($args[1], array_keys($database->getAllPlayerWarps($sender)))) {
-                        $warp = $database->getPlayerWarp($sender, $args[1]);
+                    if (in_array($args[1], $database->getAllWarps())) {
+                        $warp = $database->getPlayerWarp($args[1]);
                         $sender->teleport(Position::fromObject(new Vector3($warp->getX(), $warp->getY(), $warp->getZ()), $warp->getWorld()));
                         $sender->sendMessage('You warped to ' . TF::GOLD . $args[1]);
                     } else {
@@ -55,7 +55,8 @@ class PlayerWarpCommand extends Command
             case 'set':
                 $database = PlayerWarp::getInstance()->getDatabaseManager();
                 if (isset($args[1])) {
-                    if (!in_array($args[1], array_keys($database->getAllPlayerWarps($sender)))) {
+                    in_array($args[0], $database->getAllWarps()) ? var_dump(true) : var_dump(false);
+                    if (!in_array($args[1], $database->getAllWarps())) {
                         foreach (PlayerWarp::getInstance()->getConfig()->get('permissions') as $permission => $max) {
                             if ($sender->hasPermission($permission)) {
                                 if (count($database->getAllPlayerWarps($sender)) < $max) {
@@ -95,7 +96,7 @@ class PlayerWarpCommand extends Command
                 break;
             case 'list':
                 $database = PlayerWarp::getInstance()->getDatabaseManager();
-                $sender->sendMessage('All warps: ' . TF::GOLD . implode(', ', array_keys($database->getAllPlayerWarps($sender))));
+                $sender->sendMessage('All warps: ' . TF::GOLD . implode(', ', $database->getAllWarps()));
                 break;
             case 'help':
                 $sender->sendMessage('Player Warp Commands:');

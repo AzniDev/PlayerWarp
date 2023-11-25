@@ -49,11 +49,19 @@ class DatabaseManager
     /**
      * @param Player $player
      * @param string $warpName
-     * @return PlayerWarpManager
+     * @return PlayerWarpManager|null
      */
-    public function getPlayerWarp(Player $player, string $warpName) : PlayerWarpManager
+    public function getPlayerWarp(string $warpName) : PlayerWarpManager|null
     {
-        return new PlayerWarpManager($player, $this->database->get($player->getName())[$warpName]);
+        foreach ($this->database->getAll() as $owner => $warps) {
+            foreach (array_keys($warps) as $warp) {
+                if ($warpName === $warp) {
+                    return new PlayerWarpManager($owner, $this->database->get($owner)[$warpName]);
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -63,5 +71,19 @@ class DatabaseManager
     public function getAllPlayerWarps(Player $player) : array
     {
         return $this->database->get($player->getName(), []);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllWarps() : array
+    {
+        $allWarps = [];
+        foreach ($this->database->getAll() as $owner => $warps) {
+            foreach (array_keys($warps) as $warp) {
+                $allWarps[] = $warp;
+            }
+        }
+        return $allWarps;
     }
 }

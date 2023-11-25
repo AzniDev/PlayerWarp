@@ -17,6 +17,7 @@ class PlayerWarp extends PluginBase
     {
         self::setInstance($this);
         $this->saveDefaultConfig();
+        $this->getDatabaseManager()->getAllWarps();
         $this->getServer()->getCommandMap()->register('PlayerWarpCommand', new PlayerWarpCommand($this->getConfig()->get('command')));
     }
 

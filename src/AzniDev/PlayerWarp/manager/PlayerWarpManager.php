@@ -9,13 +9,13 @@ use pocketmine\world\World;
 class PlayerWarpManager
 {
 
-    /** Player $owner */
-    private Player $owner;
+    /** string $owner */
+    private string $owner;
 
     /** array $condition */
     private array $condition;
 
-    public function __construct(Player $owner, array $condition)
+    public function __construct(string $owner, array $condition)
     {
         $this->owner = $owner;
         $this->condition = $condition;
@@ -24,7 +24,7 @@ class PlayerWarpManager
     /**
      * @return Player
      */
-    public function getOwner() : Player
+    public function getOwner() : string
     {
         return $this->owner;
     }
