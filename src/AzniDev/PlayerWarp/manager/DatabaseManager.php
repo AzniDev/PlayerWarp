@@ -54,7 +54,7 @@ class DatabaseManager
     {
         foreach ($this->database->getAll() as $owner => $warps) {
             foreach (array_keys($warps) as $warp) {
-                if ($warpName === $warp) {
+                if ($warpName === strval($warp)) {
                     return new PlayerWarpManager($owner, $this->database->get($owner)[$warpName]);
                 }
             }
