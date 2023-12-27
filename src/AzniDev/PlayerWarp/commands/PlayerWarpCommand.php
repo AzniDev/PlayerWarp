@@ -7,14 +7,17 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
+use pocketmine\plugin\PluginOwnedTrait;
 use pocketmine\utils\TextFormat as TF;
 use pocketmine\world\Position;
 
 class PlayerWarpCommand extends Command
 {
+    use PluginOwnedTrait;
 
     public function __construct(array $command)
     {
+        $this->owningPlugin = PlayerWarp::getInstance();
         $this->setPermission('playerwarp.command');
         parent::__construct($command['name'], $command['description'], null, $command['aliases']);
     }
@@ -39,7 +42,7 @@ class PlayerWarpCommand extends Command
         switch ($args[0]) {
             case 'tp':
             case 'teleport':
-                $database = PlayerWarp::getInstance()->getDatabaseManager();
+                $database = $this->getOwningPlugin()->getDatabaseManager();
                 if (isset($args[1])) {
                     if (in_array($args[1], $database->getAllWarps())) {
                         $warp = $database->getPlayerWarp($args[1]);
@@ -53,11 +56,11 @@ class PlayerWarpCommand extends Command
                 }
                 break;
             case 'set':
-                $database = PlayerWarp::getInstance()->getDatabaseManager();
+                $database = $this->getOwningPlugin()->getDatabaseManager();
                 if (isset($args[1])) {
                     in_array($args[0], $database->getAllWarps()) ? var_dump(true) : var_dump(false);
                     if (!in_array($args[1], $database->getAllWarps())) {
-                        foreach (PlayerWarp::getInstance()->getConfig()->get('permissions') as $permission => $max) {
+                        foreach ($this->getOwningPlugin()->getConfig()->get('permissions') as $permission => $max) {
                             if ($sender->hasPermission($permission)) {
                                 if (count($database->getAllPlayerWarps($sender)) < $max) {
                                     $database->setPlayerWarp($sender, $args[1]);
@@ -68,7 +71,7 @@ class PlayerWarpCommand extends Command
                                 return;
                             }
                         }
-                        if (count($database->getAllPlayerWarps($sender)) < PlayerWarp::getInstance()->getConfig()->get('max-warp')) {
+                        if (count($database->getAllPlayerWarps($sender)) < $this->getOwningPlugin()->getConfig()->get('max-warp')) {
                             $database->setPlayerWarp($sender, $args[1]);
                             $sender->sendMessage('Warp set as ' . TF::GOLD . $args[1]);
                         } else {
@@ -82,7 +85,7 @@ class PlayerWarpCommand extends Command
                 }
                 break;
             case 'delete':
-                $database = PlayerWarp::getInstance()->getDatabaseManager();
+                $database = $this->getOwningPlugin()->getDatabaseManager();
                 if (isset($args[1])) {
                     if (in_array($args[1], array_keys($database->getAllPlayerWarps($sender)))) {
                         $database->deletePlayerWarp($sender, $args[1]);
@@ -95,7 +98,7 @@ class PlayerWarpCommand extends Command
                 }
                 break;
             case 'list':
-                $database = PlayerWarp::getInstance()->getDatabaseManager();
+                $database = $this->getOwningPlugin()->getDatabaseManager();
                 $sender->sendMessage('All warps: ' . TF::GOLD . implode(', ', $database->getAllWarps()));
                 break;
             case 'help':
